@@ -7,16 +7,12 @@ import 'package:github_app/bloc/repository_bloc/repository_bloc_cubit.dart';
 import 'package:github_app/bloc/repository_bloc/repository_bloc_state.dart';
 import 'package:github_app/models/repository.dart';
 import 'package:github_app/ui/extra/lazy_loading_view.dart';
+import 'package:github_app/utils/helper.dart';
 
-class RepositoryPage extends StatefulWidget {
+class RepositoryPage extends StatelessWidget {
   const RepositoryPage({Key? key}) : super(key: key);
 
-  @override
-  State<RepositoryPage> createState() => _RepositoryPageState();
-}
-
-class _RepositoryPageState extends State<RepositoryPage> {
-  getData(int page, {required bool keepPrevius}) {
+  getData(BuildContext context, int page, {required bool keepPrevius}) {
     final repositoryRead = context.read<RepositoryBlocCubit>();
     final mainState = context.read<MainBlocCubit>().state;
     final runFun = keepPrevius
@@ -36,8 +32,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
       body: BlocListener<RepositoryBlocCubit, RepositoryBlocState>(
         listener: (context, state) {
           if (state is RepositoryBlocErrorState) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+            Helper.func.showSnackbar(context, state.error);
           }
         },
         child: BlocBuilder<RepositoryBlocCubit, RepositoryBlocState>(
@@ -51,8 +46,16 @@ class _RepositoryPageState extends State<RepositoryPage> {
             }
 
             return LazyLoadingView(
+              onInit: (index) {
+                getData(
+                  context,
+                  index,
+                  keepPrevius: false,
+                );
+              },
               onScrollEnd: (index) {
                 getData(
+                  context,
                   index,
                   keepPrevius: true,
                 );
@@ -61,6 +64,7 @@ class _RepositoryPageState extends State<RepositoryPage> {
                   state is RepositoryBlocLoadingState,
               onIndexChange: (page) {
                 getData(
+                  context,
                   page,
                   keepPrevius: false,
                 );

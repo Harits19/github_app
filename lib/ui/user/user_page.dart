@@ -7,16 +7,12 @@ import 'package:github_app/bloc/user_bloc/user_bloc_state.dart';
 import 'package:github_app/models/user.dart';
 import 'package:github_app/ui/extra/image_container.dart';
 import 'package:github_app/ui/extra/lazy_loading_view.dart';
+import 'package:github_app/utils/helper.dart';
 
-class UserPage extends StatefulWidget {
+class UserPage extends StatelessWidget {
   const UserPage({Key? key}) : super(key: key);
 
-  @override
-  State<UserPage> createState() => _UserPageState();
-}
-
-class _UserPageState extends State<UserPage> {
-  getData(int page, {required bool keepPrevius}) {
+  getData(BuildContext context, int page, {required bool keepPrevius}) {
     final userRead = context.read<UserBlocCubit>();
     final mainState = context.read<MainBlocCubit>().state;
     final runFun =
@@ -35,8 +31,7 @@ class _UserPageState extends State<UserPage> {
       body: BlocListener<UserBlocCubit, UserBlocState>(
         listener: (context, state) {
           if (state is UserBlocErrorState) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.error)));
+            Helper.func.showSnackbar(context, state.error);
           }
         },
         child: BlocBuilder<UserBlocCubit, UserBlocState>(
@@ -50,8 +45,17 @@ class _UserPageState extends State<UserPage> {
             }
 
             return LazyLoadingView(
+              onInit: (page) {
+                getData(
+                  context,
+                  page,
+                  keepPrevius: false,
+                );
+                print("called onInit");
+              },
               onScrollEnd: (index) {
                 getData(
+                  context,
                   index,
                   keepPrevius: true,
                 );
@@ -60,6 +64,7 @@ class _UserPageState extends State<UserPage> {
                   state is UserBlocLoadingState,
               onIndexChange: (page) {
                 getData(
+                  context,
                   page,
                   keepPrevius: false,
                 );

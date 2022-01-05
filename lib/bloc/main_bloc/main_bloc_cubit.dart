@@ -6,6 +6,7 @@ class MainBlocCubit extends Cubit<MainBlocState> {
       : super(const MainBlocLoadedState(
           query: "",
           selectedMethod: 0,
+          page: 1,
         ));
 
   void updateQuery({
@@ -16,6 +17,7 @@ class MainBlocCubit extends Cubit<MainBlocState> {
       emit(MainBlocLoadedState(
         query: query,
         selectedMethod: state.selectedMethod,
+        page: state.page,
       ));
     }
   }
@@ -28,7 +30,20 @@ class MainBlocCubit extends Cubit<MainBlocState> {
       emit(MainBlocLoadedState(
         query: state.query,
         selectedMethod: selectedMethod,
+        page: state.page,
       ));
     }
+  }
+
+  void updatePage({
+    required int page,
+  }) async {
+    print({updatePage, " called ", page});
+    final state = this.state as MainBlocLoadedState;
+    emit(MainBlocLoadedState(
+      query: state.query,
+      selectedMethod: state.selectedMethod,
+      page: page,
+    ));
   }
 }

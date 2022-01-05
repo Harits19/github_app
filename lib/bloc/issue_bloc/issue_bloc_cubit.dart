@@ -13,8 +13,12 @@ class IssueBlocCubit extends Cubit<IssueBlocState> {
     required String query,
     required int page,
   }) async {
+    if (query.isEmpty) {
+      emit(const IssueBlocLoadedState([]));
+      return;
+    }
+
     emit(IssueBlocLoadingState());
-    if (query.isEmpty) emit(const IssueBlocLoadedState([]));
     githubApi.getSearchIssue(
       page: page,
       query: query,
@@ -23,6 +27,7 @@ class IssueBlocCubit extends Cubit<IssueBlocState> {
       },
       onError: (error) {
         emit(IssueBlocErrorState(error));
+        emit(const IssueBlocLoadedState([]));
       },
     );
   }
@@ -38,7 +43,10 @@ class IssueBlocCubit extends Cubit<IssueBlocState> {
       prevIssues = state.issues;
       emit(IssueBlocLazyLoadingState(prevIssues));
     }
-    if (query.isEmpty) emit(const IssueBlocLoadedState([]));
+    if (query.isEmpty) {
+      emit(const IssueBlocLoadedState([]));
+      return;
+    }
     githubApi.getSearchIssue(
       page: page,
       query: query,
@@ -47,7 +55,7 @@ class IssueBlocCubit extends Cubit<IssueBlocState> {
       },
       onError: (error) {
         emit(IssueBlocErrorState(error));
-        emit(IssueBlocLoadedState(prevIssues));
+        emit(const IssueBlocLoadedState([]));
       },
     );
   }

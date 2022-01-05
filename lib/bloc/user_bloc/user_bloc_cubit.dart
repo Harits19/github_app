@@ -13,8 +13,11 @@ class UserBlocCubit extends Cubit<UserBlocState> {
     required String query,
     required int page,
   }) async {
+    if (query.isEmpty) {
+      emit(const UserBlocLoadedState([]));
+      return;
+    }
     emit(UserBlocLoadingState());
-    if (query.isEmpty) emit(const UserBlocLoadedState([]));
     githubApi.getSearchUser(
       page: page,
       query: query,
@@ -23,6 +26,7 @@ class UserBlocCubit extends Cubit<UserBlocState> {
       },
       onError: (error) {
         emit(UserBlocErrorState(error));
+        emit(const UserBlocLoadedState([]));
       },
     );
   }
@@ -38,7 +42,10 @@ class UserBlocCubit extends Cubit<UserBlocState> {
       prevUsers = state.users;
       emit(UserBlocLazyLoadingState(prevUsers));
     }
-    if (query.isEmpty) emit(const UserBlocLoadedState([]));
+    if (query.isEmpty) {
+      emit(const UserBlocLoadedState([]));
+      return;
+    }
     githubApi.getSearchUser(
       page: page,
       query: query,
@@ -47,7 +54,7 @@ class UserBlocCubit extends Cubit<UserBlocState> {
       },
       onError: (error) {
         emit(UserBlocErrorState(error));
-        emit(UserBlocLoadedState(prevUsers));
+        emit(const UserBlocLoadedState([]));
       },
     );
   }

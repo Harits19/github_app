@@ -12,8 +12,12 @@ class MainBlocInitialState extends MainBlocState {}
 class MainBlocLoadedState extends MainBlocState {
   final String query;
   final int selectedMethod;
-  const MainBlocLoadedState(
-      {required this.query, required this.selectedMethod});
+  final int page;
+  const MainBlocLoadedState({
+    required this.query,
+    required this.selectedMethod,
+    required this.page,
+  });
   @override
-  List<Object> get props => [query, selectedMethod];
+  List<Object> get props => [query, selectedMethod, page];
 }

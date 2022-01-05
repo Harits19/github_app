@@ -18,7 +18,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int selectedRadio = 2;
+  int selectedRadio = 0;
 
   final listBody = const [UserPage(), IssuePage(), RepositoryPage()];
 
@@ -52,6 +52,16 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  loadData() {
+    if (selectedRadio == 0) {
+      loadItemUser();
+    } else if (selectedRadio == 1) {
+      loadItemIssue();
+    } else if (selectedRadio == 2) {
+      loadItemRepo();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,13 +75,8 @@ class _MainPageState extends State<MainPage> {
                 onChanged: (val) {
                   final mainRead = context.read<MainBlocCubit>();
                   mainRead.updateQuery(query: val);
-                  if (selectedRadio == 0) {
-                    loadItemUser();
-                  } else if (selectedRadio == 1) {
-                    loadItemIssue();
-                  } else if (selectedRadio == 2) {
-                    loadItemRepo();
-                  }
+                  mainRead.updatePage(page: 1);
+                  loadData();
                 },
               ),
             ),
@@ -84,6 +89,8 @@ class _MainPageState extends State<MainPage> {
                     onTap: () {
                       selectedRadio = index;
                       setState(() {});
+                      final mainRead = context.read<MainBlocCubit>();
+                      mainRead.updatePage(page: 1);
                     },
                     child: Row(
                       children: [
@@ -117,6 +124,9 @@ class _MainPageState extends State<MainPage> {
                           onTap: () {
                             final mainRead = context.read<MainBlocCubit>();
                             mainRead.updateMethod(selectedMethod: index);
+                            if (index == 0) {
+                              loadData();
+                            }
                           },
                           child: Container(
                             margin: const EdgeInsets.all(8),

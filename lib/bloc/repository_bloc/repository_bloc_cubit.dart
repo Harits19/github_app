@@ -13,8 +13,12 @@ class RepositoryBlocCubit extends Cubit<RepositoryBlocState> {
     required String query,
     required int page,
   }) async {
+    if (query.isEmpty) {
+      emit(const RepositoryBlocLoadedState([]));
+      return;
+    }
+
     emit(RepositoryBlocLoadingState());
-    if (query.isEmpty) emit(const RepositoryBlocLoadedState([]));
     githubApi.getSearchRepository(
       page: page,
       query: query,
@@ -23,6 +27,7 @@ class RepositoryBlocCubit extends Cubit<RepositoryBlocState> {
       },
       onError: (error) {
         emit(RepositoryBlocErrorState(error));
+        emit(const RepositoryBlocLoadedState([]));
       },
     );
   }
@@ -38,7 +43,11 @@ class RepositoryBlocCubit extends Cubit<RepositoryBlocState> {
       prevRepositorys = state.repositorys;
       emit(RepositoryBlocLazyLoadingState(prevRepositorys));
     }
-    if (query.isEmpty) emit(const RepositoryBlocLoadedState([]));
+    if (query.isEmpty) {
+      emit(const RepositoryBlocLoadedState([]));
+      return;
+    }
+
     githubApi.getSearchRepository(
       page: page,
       query: query,
@@ -47,7 +56,7 @@ class RepositoryBlocCubit extends Cubit<RepositoryBlocState> {
       },
       onError: (error) {
         emit(RepositoryBlocErrorState(error));
-        emit(RepositoryBlocLoadedState(prevRepositorys));
+        emit(const RepositoryBlocLoadedState([]));
       },
     );
   }
