@@ -5,7 +5,6 @@ import 'package:github_app/bloc/main_bloc/main_bloc_state.dart';
 import 'package:github_app/bloc/user_bloc/user_bloc_cubit.dart';
 import 'package:github_app/bloc/user_bloc/user_bloc_state.dart';
 import 'package:github_app/models/user.dart';
-import 'package:github_app/ui/extra/circular_progress.dart';
 import 'package:github_app/ui/extra/image_container.dart';
 import 'package:github_app/ui/extra/lazy_loading_view.dart';
 

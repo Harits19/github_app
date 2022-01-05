@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_app/bloc/main_bloc/main_bloc_state.dart';
-import 'package:github_app/utils/constans.dart';
 
 class MainBlocCubit extends Cubit<MainBlocState> {
   MainBlocCubit()

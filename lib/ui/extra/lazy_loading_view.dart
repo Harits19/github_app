@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_app/bloc/main_bloc/main_bloc_cubit.dart';
 import 'package:github_app/bloc/main_bloc/main_bloc_state.dart';
 import 'package:github_app/ui/extra/circular_progress.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 class LazyLoadingView extends StatefulWidget {
   const LazyLoadingView({

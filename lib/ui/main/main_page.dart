@@ -65,7 +65,13 @@ class _MainPageState extends State<MainPage> {
                 onChanged: (val) {
                   final mainRead = context.read<MainBlocCubit>();
                   mainRead.updateQuery(query: val);
-                  loadItemRepo();
+                  if (selectedRadio == 0) {
+                    loadItemUser();
+                  } else if (selectedRadio == 1) {
+                    loadItemIssue();
+                  } else if (selectedRadio == 2) {
+                    loadItemRepo();
+                  }
                 },
               ),
             ),

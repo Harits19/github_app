@@ -17,8 +17,6 @@ class ApiConfig {
         error: true,
         compact: true,
         maxWidth: 90));
-    print("created dio instance");
-
     return dioInstance;
   }
 

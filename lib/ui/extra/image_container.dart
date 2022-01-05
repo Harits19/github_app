@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:github_app/services/github_api.dart';
 
 class ImageContainer extends StatelessWidget {
   const ImageContainer({
