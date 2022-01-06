@@ -42,80 +42,67 @@ class _LazyLoadingViewState extends State<LazyLoadingView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<MainBlocCubit, MainBlocState>(
-      listener: (context, state) {
-        if (state is MainBlocLoadedState) {
-          if (state.selectedMethod == 0) {
-            final mainRead = context.read<MainBlocCubit>();
-            mainRead.updatePage(page: 1);
-          }
-        }
-      },
-      child:
-          BlocBuilder<MainBlocCubit, MainBlocState>(builder: (context, state) {
-        final _state = state as MainBlocLoadedState;
-        final isLazyLoading = _state.selectedMethod == 0;
-        return Column(
-          children: [
-            Expanded(
-              child: NotificationListener<ScrollEndNotification>(
-                onNotification: (scrollEnd) {
-                  final metrics = scrollEnd.metrics;
-                  if (metrics.atEdge) {
-                    bool isTop = metrics.pixels == 0;
-                    if (isTop) {
-                      // print('At the top');
-                    } else {
-                      if (isLazyLoading) updatePage();
-                    }
+    return BlocBuilder<MainBlocCubit, MainBlocState>(builder: (context, state) {
+      final _state = state as MainBlocLoadedState;
+      final isLazyLoading = _state.selectedMethod == 0;
+      return Column(
+        children: [
+          Expanded(
+            child: NotificationListener<ScrollEndNotification>(
+              onNotification: (scrollEnd) {
+                final metrics = scrollEnd.metrics;
+                if (metrics.atEdge) {
+                  bool isTop = metrics.pixels == 0;
+                  if (isTop) {
+                    // print('At the top');
+                  } else {
+                    if (isLazyLoading) updatePage();
                   }
-                  return true;
-                },
-                child: ListView(
-                  children: [
-                    ...widget.children,
-                    if (widget.isLoading) const CircularProgress(),
-                  ],
-                ),
+                }
+                return true;
+              },
+              child: ListView(
+                children: [
+                  ...widget.children,
+                  if (widget.isLoading) const CircularProgress(),
+                ],
               ),
             ),
-            if (!isLazyLoading)
-              SizedBox(
-                height: 40,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ...List.generate(
-                      50,
-                      (index) => InkWell(
-                        onTap: () {
-                          final mainRead = context.read<MainBlocCubit>();
-                          final mainState =
-                              mainRead.state as MainBlocLoadedState;
-                          mainRead.updatePage(page: (index + 1));
-                          widget.onIndexChange((mainState.page));
-                        },
-                        child: BlocBuilder<MainBlocCubit, MainBlocState>(
-                            builder: (context, bloc) {
-                          final state = bloc as MainBlocLoadedState;
+          ),
+          if (!isLazyLoading)
+            SizedBox(
+              height: 40,
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ...List.generate(
+                    50,
+                    (index) => InkWell(
+                      onTap: () {
+                        final mainRead = context.read<MainBlocCubit>();
+                        final mainState = mainRead.state as MainBlocLoadedState;
+                        mainRead.updatePage(page: (index + 1));
+                        widget.onIndexChange((mainState.page));
+                      },
+                      child: BlocBuilder<MainBlocCubit, MainBlocState>(
+                          builder: (context, bloc) {
+                        final state = bloc as MainBlocLoadedState;
 
-                          return Container(
-                            color:
-                                state.page == (index + 1) ? Colors.grey : null,
-                            width: 40,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(child: Text("${index + 1}")),
-                          );
-                        }),
-                      ),
+                        return Container(
+                          color: state.page == (index + 1) ? Colors.grey : null,
+                          width: 40,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: Text("${index + 1}")),
+                        );
+                      }),
                     ),
-                  ],
-                ),
-              )
-          ],
-        );
-      }),
-    );
+                  ),
+                ],
+              ),
+            )
+        ],
+      );
+    });
   }
 }

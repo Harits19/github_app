@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
         context.read<MainBlocCubit>().state as MainBlocLoadedState;
     userRead.getSearchUser(
       query: mainState.query,
-      page: 1,
+      page: mainState.page,
     );
   }
 
@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
         context.read<MainBlocCubit>().state as MainBlocLoadedState;
     issueRead.getSearchIssue(
       query: mainState.query,
-      page: 1,
+      page: mainState.page,
     );
   }
 
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
         context.read<MainBlocCubit>().state as MainBlocLoadedState;
     issueRead.getSearchRepository(
       query: mainState.query,
-      page: 1,
+      page: mainState.page,
     );
   }
 
@@ -125,8 +125,9 @@ class _MainPageState extends State<MainPage> {
                             final mainRead = context.read<MainBlocCubit>();
                             mainRead.updateMethod(selectedMethod: index);
                             if (index == 0) {
-                              loadData();
+                              mainRead.updatePage(page: 1);
                             }
+                            loadData();
                           },
                           child: Container(
                             margin: const EdgeInsets.all(8),
