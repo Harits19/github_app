@@ -1,8 +1,8 @@
 # Github App
 
-Ini adalah proyek untuk mengikuti proses rekrutmen
+This is project for following the recrutment process from PT Majoo Indonesia
 
-# Teknologi
+# Technology
 
 - [**dio**](https://pub.dev/packages/dio)
 - [**device_preview**](https://pub.dev/packages/device_preview)
@@ -13,4 +13,4 @@ Ini adalah proyek untuk mengikuti proses rekrutmen
 
 # Demo
 
-![enter image description here](https://github.com/Harits19/github_app/blob/main/demo/demo.gif?raw=true)
+![Demo](https://github.com/Harits19/github_app/blob/main/demo/demo.gif?raw=true)
